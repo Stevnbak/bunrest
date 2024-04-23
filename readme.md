@@ -185,11 +185,13 @@ export interface BunRequest {
   method: string;
   request: Request;
   path: string;
-  header?: { [key: string]: any };
+  headers?: { [key: string]: any };
   params?: { [key: string]: any };
   query?: { [key: string]: any };
-  body?: { [key: string]: any };
+  body?: { [key: string]: any } | string | undefined;
   blob?: any;
+  cookies?: Record<string, any>;
+  originalUrl: string;
 }
 ```
 
@@ -205,7 +207,10 @@ export interface BunResponse {
     setHeader(key: string, value: any);
     // nodejs way to get headers
     getHeader();this.options.headers;
+    removeHeader(key: string): BunResponse;
     headers(header: HeadersInit): BunResponse;
+    cookie(name: string, value: string, options: CookieOptions): BunResponse;
+    clearCookie(name: string, options: CookieOptions): BunResponse;
     getResponse(): Response;
     isReady(): boolean;turn !!this.response;
 }

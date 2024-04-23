@@ -48,16 +48,21 @@ export class BunResponse {
         return this.options.headers;
     }
 
-    removeHeader(key: string) {
+    removeHeader(key: string): BunResponse {
         if (!key) {
             throw new Error("Headers key should not be empty");
         }
         if (this.options.headers) delete this.options.headers[key];
         return this;
     }
-    
+
+    headers(header: HeadersInit): BunResponse {
+        this.options.headers = header;
+        return this;
+    }
+
     // does not implement signed cookies
-    cookie(name: string, value: string, options: CookieOptions) {
+    cookie(name: string, value: string, options: CookieOptions): BunResponse {
         var opts = {...options};
         var val = typeof value === "object" ? "j:" + JSON.stringify(value) : String(value);
         if (opts.maxAge != null) {
@@ -75,15 +80,10 @@ export class BunResponse {
         return this;
     }
 
-    clearCookie(name: string, options: CookieOptions) {
+    clearCookie(name: string, options: CookieOptions): BunResponse {
         var opts = {...{ expires: new Date(1), path: '/' }, ...options};
         return this.cookie(name, '', opts);
     };
-
-    headers(header: HeadersInit): BunResponse {
-        this.options.headers = header;
-        return this;
-    }
 
     getResponse(): Response {
         return this.response;
