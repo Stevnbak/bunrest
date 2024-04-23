@@ -48,6 +48,14 @@ export class BunResponse {
         return this.options.headers;
     }
 
+    removeHeader(key: string) {
+        if (!key) {
+            throw new Error("Headers key should not be empty");
+        }
+        if (this.options.headers) delete this.options.headers[key];
+        return this;
+    }
+
     headers(header: HeadersInit): BunResponse {
         this.options.headers = header;
         return this;
