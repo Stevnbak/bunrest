@@ -47,6 +47,7 @@ export interface BunRequest {
   query?: { [key: string]: any };
   body?: { [key: string]: any } | string | undefined;
   blob?: any;
+  cookies?: Record<string, any>;
   originalUrl: string;
 }
 
