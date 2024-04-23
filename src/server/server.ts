@@ -145,6 +145,11 @@ class BunServer implements RequestMethod {
       lowMemoryMode: options?.lowMemoryMode,
       development: process.env.SERVER_ENV !== "production",
       async fetch(req1: Request) {
+        //Allow web socket server to function:
+        if(this.upgrade(req1)) {
+          return;
+        }
+        
         const req: BunRequest = await that.bunRequest(req1);
         const res = that.responseProxy();
 
