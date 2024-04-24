@@ -76,7 +76,7 @@ app.ws<{id: string}>((ws, msg) => {
         console.log('Websocket is drained')
     }
 },
-(req) => ({data: {id: "id"}})
+(req) => ({id: "id"})
 )
 
 const URL_PORT = 5555;
