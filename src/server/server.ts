@@ -85,29 +85,35 @@ class BunServer implements RequestMethod {
    * Add middleware
    * @param middleware
    */
-  use(middleware: Handler): void;
+  use<T extends Middleware>(middleware: Middleware): void;
+
+    /**
+   * Add handler
+   * @param handler
+   */
+    use<T extends Handler>(handler: Handler): void;
 
   /**
    * Attach router
    * @param path
    * @param router
    */
-  use(path: string, router: Router): void;
+  use<T extends Router>(path: string, router: Router): void
 
   /**
    * Attch middleware or router or global error handler
    * @param arg1
    * @param arg2
    */
-  use(arg1: string | Handler, arg2?: Router) {
+  use(arg1: string | Middleware | Handler, arg2?: Router) {
     // pass router
-    if (arg2 && typeof arg1 === "string") {
+    if (typeof arg1 === "string") {
       arg2.attach(arg1);
     }
     // pass middleware or global error handler
     else {
       if (arg1.length === 3) {
-        this.middlewares.push(arg1 as Handler);
+        this.middlewares.push(arg1 as Middleware);
       } else if (arg1.length === 4) {
         this.errorHandlers.push(arg1 as Handler);
       }
@@ -190,7 +196,7 @@ class BunServer implements RequestMethod {
           }
         }
 
-        const handler: Handler[] = leaf.node?.getHandler();
+        const handler: Handler = leaf.node?.getHandler();
         const middlewares: Handler[] = leaf.node?.getMiddlewares();
 
         const chain = new Chain(req, res, middlewares);
@@ -297,7 +303,7 @@ class BunServer implements RequestMethod {
     this.submitToMap(method.toLowerCase(), path, handler, middlewares);
   }
 
-  private submitToMap(method: string, path: string, handler: Handler, middlewares: Middleware) {
+  private submitToMap(method: string, path: string, handler: Handler, middlewares: Middleware[]) {
     let targetTree: TrieTree<string, Handler> = this.requestMap[method];
     if (!targetTree) {
       this.requestMap[method] = new TrieTree();

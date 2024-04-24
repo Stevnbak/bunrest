@@ -1,20 +1,20 @@
-import { BunRequest, MiddlewareFunc } from "../server/request";
+import { BunRequest, Middleware } from "../server/request";
 import { BunResponse } from "../server/response";
 
 export class Chain {
     private index: number = 0;
     private req: BunRequest;
     private res: BunResponse;
-    private middlewares: MiddlewareFunc[];
+    private middlewares: Middleware[];
     private resolve: () => void;
 
-    constructor(req: BunRequest, res: BunResponse, middlewares: MiddlewareFunc[]) {
+    constructor(req: BunRequest, res: BunResponse, middlewares: Middleware[]) {
         this.req = req;
         this.res = res;
         this.middlewares = middlewares;
     }
 
-    private async processNext(err: Error) {
+    private async processNext(err?: Error) {
         if (err) {
             throw err;
         }
@@ -22,9 +22,10 @@ export class Chain {
             const middleware = this.middlewares[this.index++];
             let nextCalled = false;
 
-            const nextWrapper = (err: Error) => {
+            const nextWrapper = (err?: Error) => {
                 nextCalled = true;
                 this.processNext(err);
+                return {};
             };
 
             await middleware(this.req, this.res, nextWrapper);

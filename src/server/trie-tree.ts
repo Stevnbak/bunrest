@@ -100,7 +100,7 @@ export interface TrieLeaf<k, v> {
 // node of trie tree
 class Node<k, v> {
   private readonly path?: string;
-  private readonly handlers: Route = {};
+  private handlers: Route = {};
   private readonly children: Node<k, v>[] = [];
 
   constructor(path?: string) {

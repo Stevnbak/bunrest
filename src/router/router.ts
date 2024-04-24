@@ -57,7 +57,7 @@ export class Router implements RequestMethod {
     this.delegate(path, "HEAD", handlers);
   }
 
-  use(middleware: Handler) {
+  use(middleware: Middleware) {
     this.localMiddlewares.push(middleware);
   }
 
@@ -84,7 +84,7 @@ export class Router implements RequestMethod {
     this.submitToMap(method.toLowerCase(), localPath, handler, middlewares);
   }
 
-  private submitToMap(method: string, path: string, handler: Handler, middlewares: Middleware) {
+  private submitToMap(method: string, path: string, handler: Handler, middlewares: Handler[]) {
     let targetMap: RequestTuple[] = this.localRequestMap[method];
     if (!targetMap) {
       this.localRequestMap[method] = [];

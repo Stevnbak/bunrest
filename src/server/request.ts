@@ -10,11 +10,11 @@ export type Handler = (
 
 export type Route = (
   handler: Handler,
-  middlewareFuncs: Handler[]
+  middlewareFuncs: Middleware[]
 ) => void | Promise<any>;
 
-export type MiddlewareFunc = (
-  req: Request,
+export type Middleware = (
+  req: BunRequest,
   res: BunResponse,
   next: (err?: Error) => {}
 ) => void;
@@ -22,11 +22,6 @@ export type MiddlewareFunc = (
 export type RequestMethodType = 'GET' | 'PUT' | 'POST' | 'DELETE' | 'PATCH' | 'OPTIONS' | 'HEAD';
 
 export type RequestHandler = (path: string, ...handlers: Handler[]) => void;
-
-export type Middleware = {
-  path: string;
-  middlewareFunc: Handler;
-};
 
 export interface RequestMethod {
   get: RequestHandler;
