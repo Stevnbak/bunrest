@@ -144,9 +144,9 @@ class BunServer implements RequestMethod {
       dhParamsFile: options?.dhParamsFile,
       lowMemoryMode: options?.lowMemoryMode,
       development: process.env.SERVER_ENV !== "production",
-      async fetch(req1: Request) {
+      async fetch(req1: Request, server?: Server) {
         //Allow web socket server to function:
-        if(this.upgrade(req1)) {
+        if(that.webSocketHandler && server?.upgrade(req1)) {
           return;
         }
         

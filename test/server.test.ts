@@ -332,33 +332,35 @@ describe('middleware test', () => {
 })
 
 describe('websocket test', () => {
-    it(('ws'), () => {
+    it(('ws'), async () => {
         let server = app.listen(URL_PORT, () => {
             console.log(`App is listening on port ${URL_PORT}`);
         });
         try {
-            const socket = new WebSocket(`ws://localhost:${URL_PORT}`);
             const msg = 'Hello world'
-            // message is received
-            socket.addEventListener("message", event => {
-                expect(event.data).toBe(msg)
-            });
+            expect(await new Promise((resolve) => {
+                const socket = new WebSocket(`ws://localhost:${URL_PORT}`);
+                // message is received
+                socket.addEventListener("message", event => {
+                    resolve(event.data);
+                });
+                // socket opened
+                socket.addEventListener("open", event => {
+                    console.log('Open')
+                    socket.send(msg)
+                });
+                // socket closed
+                socket.addEventListener("close", event => {
+                    console.log('Close ' + event.code);
+                    resolve(false);
+                });
 
-            // socket opened
-            socket.addEventListener("open", event => {
-                console.log('Open')
-                socket.send(msg)
-            });
-
-            // socket closed
-            socket.addEventListener("close", event => {
-                console.log('Close')
-            });
-
-            // error handler
-            socket.addEventListener("error", event => {
-                console.log('Error')
-            });
+                // error handler
+                socket.addEventListener("error", event => {
+                    console.log('Error')
+                    resolve(false);
+                });
+            })).toBe(msg);
         } catch (e) {
             throw e
         } finally {
