@@ -2,8 +2,8 @@ import { BunResponse } from "./response";
 import { TrieTree } from "./trie-tree";
 
 export type Handler = (
-  req: BunRequest | Request,
-  res: BunResponse | Response,
+  req: BunRequest,
+  res: BunResponse,
   next?: (err?: Error) => {},
   err?: Error
 ) => void | Promise<any>;
