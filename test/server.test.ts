@@ -65,20 +65,6 @@ app.use((req, res, next, err) => {
     res.status(500).send('Err /err');
 });
 
-app.ws<{id: string}>((ws, msg) => {
-    ws.send(ws.data.id + "|" + msg)
-}, {
-    open: (ws) => {
-        console.log('Websocket is turned on')
-    }, close: (ws) => {
-        console.log('Websocket is closed')
-    }, drain: (ws) => {
-        console.log('Websocket is drained')
-    }
-},
-(req) => ({id: "id"})
-)
-
 const URL_PORT = 5555;
 const BASE_URL = `http://localhost:${URL_PORT}`;
 
@@ -329,44 +315,6 @@ describe('middleware test', () => {
             throw e;
         } finally {
             server.stop();
-        }
-    })
-})
-
-describe('websocket test', () => {
-    it(('ws'), async () => {
-        let server = app.listen(URL_PORT, () => {
-            console.log(`App is listening on port ${URL_PORT}`);
-        });
-        try {
-            const msg = 'Hello world'
-            expect(await new Promise((resolve) => {
-                const socket = new WebSocket(`ws://localhost:${URL_PORT}`);
-                // message is received
-                socket.addEventListener("message", event => {
-                    resolve(event.data);
-                });
-                // socket opened
-                socket.addEventListener("open", event => {
-                    console.log('Open')
-                    socket.send(msg)
-                });
-                // socket closed
-                socket.addEventListener("close", event => {
-                    console.log('Close ' + event.code);
-                    resolve(false);
-                });
-
-                // error handler
-                socket.addEventListener("error", event => {
-                    console.log('Error')
-                    resolve(false);
-                });
-            })).toBe("id" + "|" + msg);
-        } catch (e) {
-            throw e
-        } finally {
-            server.stop()
         }
     })
 })

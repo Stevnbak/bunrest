@@ -39,7 +39,7 @@ class BunServer implements RequestMethod {
   private readonly requestMap: RequestMapper = {};
   private readonly middlewares: Middleware[] = [];
   private readonly errorHandlers: Handler[] = [];
-  private webSocketHandler: WebSocketHandler<any> | undefined
+  private webSocketHandler: WebSocketHandler<unknown> | undefined
   private webSocketData: <DataType>(req: BunRequest) => { data: DataType} | undefined
 
   get(path: string, ...handlers: Handler[]) {
@@ -80,7 +80,7 @@ class BunServer implements RequestMethod {
       close: extra?.close,
       drain: extra?.drain,
     } as WebSocketHandler<DataType>;
-    this.webSocketData<DataType> = (req) => ({data: data(req)});
+    this.webSocketData<DataType> = data ? (req) => ({data: data(req)}) : undefined;
   }
 
   /**
@@ -157,7 +157,7 @@ class BunServer implements RequestMethod {
         const res = that.responseProxy();
 
         //Allow web socket server to function:
-        if(that.webSocketHandler && server?.upgrade<any>(req1, that.webSocketData(req))) {
+        if(that.webSocketHandler && server?.upgrade(req1, that.webSocketData(req))) {
           return;
         }
 

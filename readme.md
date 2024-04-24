@@ -234,9 +234,11 @@ const handler = (req, res) => {
 <br> To handle websocket request, just a few steps to do </br>
 
 ```js
-app.ws((ws, msg) => {
-   // here to handle incoming message
+app.ws<{str: string}>((ws, msg) => {
+    // here to handle incoming message
     ws.send(msg)
+    // get web socket data
+    console.log(ws.data)
 }, {
     open: (ws) => {
         console.log('Websocket is turned on')
@@ -245,7 +247,8 @@ app.ws((ws, msg) => {
     }, drain: (ws) => {
         console.log('Websocket is drained')
     }
-})
+},
+(req) => ({str: "socket-data"}))
 ```
 
 <br> To connect to your websocket server </br>
