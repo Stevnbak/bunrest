@@ -1,7 +1,7 @@
 import { ServerWebSocket } from "bun";
 
-export type RestSocketHandler = (
-    ws: ServerWebSocket,
+export type RestSocketHandler<DataType> = (
+    ws: ServerWebSocket<DataType>,
     message: string | Buffer,
 ) => void | Promise<void>
 

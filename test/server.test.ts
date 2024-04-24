@@ -65,8 +65,8 @@ app.use((req, res, next, err) => {
     res.status(500).send('Err /err');
 });
 
-app.ws((ws, msg) => {
-    ws.send(msg)
+app.ws<{id: string}>((ws, msg) => {
+    ws.send(ws.data.id + "|" + msg)
 }, {
     open: (ws) => {
         console.log('Websocket is turned on')
@@ -75,7 +75,9 @@ app.ws((ws, msg) => {
     }, drain: (ws) => {
         console.log('Websocket is drained')
     }
-})
+},
+(req) => ({data: {id: "id"}})
+)
 
 const URL_PORT = 5555;
 const BASE_URL = `http://localhost:${URL_PORT}`;
@@ -360,7 +362,7 @@ describe('websocket test', () => {
                     console.log('Error')
                     resolve(false);
                 });
-            })).toBe(msg);
+            })).toBe("id" + "|" + msg);
         } catch (e) {
             throw e
         } finally {
