@@ -73,7 +73,7 @@ class BunServer implements RequestMethod {
   /**
    * websocket interface
    */
-  ws<DataType>(msgHandler: RestSocketHandler<DataType>, extra: ExtraHandler<DataType> = null, data?: (req: BunRequest) => DataType) {
+  ws<DataType = undefined>(msgHandler: RestSocketHandler<DataType>, extra: ExtraHandler<DataType> = null, data?: (req: BunRequest) => DataType) {
     this.webSocketHandler = {
       message: msgHandler,
       open: extra?.open,
