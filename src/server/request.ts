@@ -2,8 +2,8 @@ import { BunResponse } from "./response";
 import { TrieTree } from "./trie-tree";
 
 export type Handler = (
-  req: BunRequest,
-  res: BunResponse,
+  req: BunRequest | Request,
+  res: BunResponse | Response,
   next?: (err?: Error) => {},
   err?: Error
 ) => void | Promise<any>;
@@ -47,6 +47,7 @@ export interface BunRequest {
   query?: { [key: string]: any };
   body?: { [key: string]: any } | string | undefined;
   blob?: any;
+  /** requires the "cookie-parser" middleware to have values. */
   cookies?: Record<string, any>;
   originalUrl: string;
 }

@@ -29,7 +29,7 @@ export class BunResponse {
         this.response = Response.redirect(url, status);
     }
 
-    // nodejs way to set headers
+    /** nodejs way to set headers */
     setHeader(key: string, value: any) {
         if (!key || !value) {
             throw new Error('Headers key or value should not be empty');
@@ -43,7 +43,7 @@ export class BunResponse {
         return this;
     }
 
-    // nodejs way to get headers
+    /** nodejs way to get headers */
     getHeader() {
         return this.options.headers;
     }
@@ -61,7 +61,7 @@ export class BunResponse {
         return this;
     }
 
-    // does not implement signed cookies
+    /** does not implement signed cookies */
     cookie(name: string, value: string, options: CookieOptions): BunResponse {
         var opts = {...options};
         var val = typeof value === "object" ? "j:" + JSON.stringify(value) : String(value);
